@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Minecraft Servers</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Minecraft Servers</h1>
+
+    <button id="create-server-button">Создать сервер</button>
+
+    <ul id="server-list">
+        <!-- Здесь будет отображаться список серверов -->
+    </ul>
+
+    <div id="create-server-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">×</span>
+            <h2>Создать новый сервер</h2>
+            <div class="tab-container">
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="settings">Настройки</button>
+                    <button class="tab-button" data-tab="docker">Docker</button>
+                </div>
+                <div class="tab-panels">
+                    <div class="tab-panel active" id="settings">
+                        <h3>Настройки</h3>
+                        <form id="settings-form">
+                            <label for="server-name">Имя сервера:</label>
+                            <input type="text" id="server-name" required><br><br>
+
+                            <label for="docker-image">Docker Image:</label>
+                            <input type="text" id="docker-image" value="itzg/minecraft-server" required><br><br>
+
+                            <label for="server-port">Порт сервера:</label>
+                            <input type="number" id="server-port" value="25565"><br><br>
+
+                            <!-- Добавьте другие поля для настроек -->
+                        </form>
+                    </div>
+                    <div class="tab-panel" id="docker">
+                        <h3>Docker Compose (yaml)</h3>
+                        <textarea id="docker-compose-yaml" rows="10" cols="50">
+version: '3.8'
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      # Добавьте нужные переменные окружения
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <button id="submit-server-button">Создать</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
