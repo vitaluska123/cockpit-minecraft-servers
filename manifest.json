@@ -3,5 +3,16 @@
     "name": "Minecraft Servers",
     "version": "0.1.0",
     "description": "Управление Minecraft серверами через Docker.",
-    "module": "./minecraft-servers/index.html"
+    "module": "./minecraft-servers/index.html",
+    "menu": {
+        "index": {
+            "label": "Minecraft Servers",
+            "order": 50,
+            "keywords": [
+                {
+                    "matches": ["minecraft", "servers", "ms"]
+                }
+            ]
+        }
+    }
   }
