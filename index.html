@@ -39,13 +39,21 @@
                             <input type="text" id="server-name" required><br><br>
 
                             <label for="docker-image">Docker Image:</label>
-                            <span class="pf-v5-c-form-control pf-m-disabled dialog-run-form-select">
-                                <select id="docker-image">
-                                    <option value="itzg/minecraft-server">itzg/minecraft-server</option>
-                                    <option value="pterodactyl/yolks">pterodactyl/yolks</option>
-                                <!-- Можно добавить другие популярные образы -->
-                            </select>
-                            </span>
+                            <div class="pf-v5-c-select__toggle pf-m-typeahead">
+                                <div class="pf-v5-c-select__toggle-wrapper">
+                                    <span class="pf-v5-c-form-control pf-m-disabled dialog-run-form-select">
+                                        <select id="docker-image">
+                                            <option value="itzg/minecraft-server">itzg/minecraft-server</option>
+                                            <option value="pterodactyl/yolks">pterodactyl/yolks</option>
+                                        <!-- Можно добавить другие популярные образы -->
+                                        </select>
+                                    </span>
+                                </div>
+                                <button id="create-image-image" aria-labelledby=" create-image-image" aria-expanded="true" aria-haspopup="listbox" type="button" class="pf-v5-c-button pf-v5-c-select__toggle-button pf-m-plain" aria-label="Options menu" tabindex="-1"><svg class="pf-v5-svg pf-v5-c-select__toggle-arrow" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true" role="img" width="1em" height="1em" style="--darkreader-inline-fill: currentColor;" data-darkreader-inline-fill=""><path d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"></path></svg></button>
+
+                            </div>
+                            
+                    
                             <br><br>
 
                             <label for="server-port">Порт сервера:</label>
