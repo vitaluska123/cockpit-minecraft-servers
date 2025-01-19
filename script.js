@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Script.js loaded");
-    console.log("typeof Cockpit:", typeof Cockpit);
+    console.log("typeof Cockpit:", typeof cockpit);
     
     const createButton = document.getElementById('create-server-button');
     const modal = document.getElementById('create-server-modal');
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для отправки запроса на бэкенд
     function createServer(config) {
         console.log("Creating server with config:", config);
-        Cockpit.spawn(["./backend_scripts/create_server.py", JSON.stringify(config)])
+        cockpit.spawn(["./backend_scripts/create_server.py", JSON.stringify(config)])
             .then(data => {
                 console.log("Server creation response:", data);
                 loadServerList(); // Обновить список серверов
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для загрузки списка серверов с бэкенда
     function loadServerList() {
-        Cockpit.spawn(["./backend_scripts/create_server.py", "--list-servers"])
+        cockpit.spawn(["./backend_scripts/create_server.py", "--list-servers"])
             .then(data => {
                 try {
                     const servers = JSON.parse(data);
@@ -152,4 +152,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Загрузка списка серверов при загрузке страницы
     loadServerList();
+    cockpit.transport.wait(function() { });
 });
