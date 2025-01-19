@@ -39,11 +39,14 @@
                             <input type="text" id="server-name" required><br><br>
 
                             <label for="docker-image">Docker Image:</label>
-                            <select id="docker-image" class="pf-v5-c-select">
-                                <option value="itzg/minecraft-server">itzg/minecraft-server</option>
-                                <option value="pterodactyl/yolks">pterodactyl/yolks</option>
+                            <span class="pf-v5-c-form-control pf-m-disabled dialog-run-form-select">
+                                <select id="docker-image">
+                                    <option value="itzg/minecraft-server">itzg/minecraft-server</option>
+                                    <option value="pterodactyl/yolks">pterodactyl/yolks</option>
                                 <!-- Можно добавить другие популярные образы -->
-                            </select><br><br>
+                            </select>
+                            </span>
+                            <br><br>
 
                             <label for="server-port">Порт сервера:</label>
                             <input type="number" id="server-port" value="25565"><br><br>
