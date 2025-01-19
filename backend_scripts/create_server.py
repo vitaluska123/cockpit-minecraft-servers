@@ -8,28 +8,33 @@ def create_docker_compose(config):
     if 'dockerCompose' in config:
         return config['dockerCompose']
     else:
-        # Генерация docker-compose.yml на основе настроек
+        environment_vars = "\n    environment:"
+        for env in config.get('environment', []):
+            environment_vars += f"\n      {env['key']}: \"{env['value']}\""
+
+        volumes_list = ""
+        for vol in config.get('volumes', []):
+            volumes_list += f"\n      - {vol}"
+
         docker_compose_content = f"""
 version: '3.8'
 services:
-  {config['name']}:
+  {config.get('name', 'minecraft-server')}:
     image: {config['image']}
     ports:
-      - "{config['port']}:{config['port']}"
-    environment:
-      EULA: "TRUE"
-      # Добавьте другие переменные окружения на основе config
+      - "{config['port']}:{config['port']}"{environment_vars}{volumes_list}
+    restart: {config.get('restart', 'unless-stopped')}
 """
         return docker_compose_content
 
 def main():
     if len(sys.argv) < 2:
-        print("Error: Configuration data not provided.")
+        print(json.dumps({"status": "error", "message": "Configuration data not provided."}))
         sys.exit(1)
 
     try:
         config = json.loads(sys.argv[1])
-        server_name = config.get('name', 'minecraft-server')
+        server_name = config.get('name', 'minecraft-server').replace(" ", "_").lower() # Санитизация имени
         server_dir = f"/opt/minecraft-servers/{server_name}"
         os.makedirs(server_dir, exist_ok=True)
 

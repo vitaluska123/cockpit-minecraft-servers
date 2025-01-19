@@ -21,11 +21,11 @@
             <div class="tab-container">
                 <div class="tabs">
                     <button class="tab-button active" data-tab="settings">Настройки</button>
-                    <button class="tab-button" data-tab="docker">Docker</button>
+                    <button class="tab-button" data-tab="docker">Docker Compose</button>
                 </div>
                 <div class="tab-panels">
                     <div class="tab-panel active" id="settings">
-                        <h3>Настройки</h3>
+                        <h3>Основные настройки</h3>
                         <form id="settings-form">
                             <label for="server-name">Имя сервера:</label>
                             <input type="text" id="server-name" required><br><br>
@@ -36,7 +36,26 @@
                             <label for="server-port">Порт сервера:</label>
                             <input type="number" id="server-port" value="25565"><br><br>
 
-                            <!-- Добавьте другие поля для настроек -->
+                            <h3>Environment Variables</h3>
+                            <div id="environment-variables">
+                                <!-- Динамически добавляемые поля -->
+                            </div>
+                            <button type="button" id="add-environment-button">Добавить переменную</button><br><br>
+
+                            <h3>Volumes</h3>
+                            <div id="volumes">
+                                <!-- Динамически добавляемые поля -->
+                            </div>
+                            <button type="button" id="add-volume-button">Добавить том</button><br><br>
+
+                            <label for="restart-policy">Restart policy:</label>
+                            <select id="restart-policy">
+                                <option value="no">no</option>
+                                <option value="on-failure">on-failure</option>
+                                <option value="always">always</option>
+                                <option value="unless-stopped" selected>unless-stopped</option>
+                            </select><br><br>
+
                         </form>
                     </div>
                     <div class="tab-panel" id="docker">
@@ -50,7 +69,6 @@ services:
       - "25565:25565"
     environment:
       EULA: "TRUE"
-      # Добавьте нужные переменные окружения
                         </textarea>
                     </div>
                 </div>

@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitButton = document.getElementById('submit-server-button');
     const serverList = document.getElementById('server-list');
 
+    const settingsForm = document.getElementById('settings-form');
+    const environmentVariablesDiv = document.getElementById('environment-variables');
+    const addEnvironmentButton = document.getElementById('add-environment-button');
+    const volumesDiv = document.getElementById('volumes');
+    const addVolumeButton = document.getElementById('add-volume-button');
+
     // Обработка открытия модального окна
     createButton.addEventListener('click', () => {
         modal.style.display = "block";
@@ -37,18 +43,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Обработка добавления environment variable
+    addEnvironmentButton.addEventListener('click', () => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <input type="text" class="env-key" placeholder="KEY">
+            <input type="text" class="env-value" placeholder="VALUE">
+            <button type="button" class="remove-env-button">Удалить</button>
+        `;
+        environmentVariablesDiv.appendChild(div);
+        attachRemoveButtonListener(div);
+    });
+
+    // Обработка добавления volume
+    addVolumeButton.addEventListener('click', () => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <input type="text" class="volume-source" placeholder="Source Path">
+            <input type="text" class="volume-destination" placeholder="Destination Path">
+            <button type="button" class="remove-volume-button">Удалить</button>
+        `;
+        volumesDiv.appendChild(div);
+        attachRemoveButtonListener(div);
+    });
+
+    // Функция для прикрепления слушателя к кнопке удаления
+    function attachRemoveButtonListener(element) {
+        const removeButton = element.querySelector('button');
+        removeButton.addEventListener('click', () => {
+            element.remove();
+        });
+    }
+
     // Обработка отправки формы создания сервера
     submitButton.addEventListener('click', () => {
         const activeTab = document.querySelector('.tab-button.active').dataset.tab;
         let configData = {};
 
         if (activeTab === 'settings') {
-            const settingsForm = document.getElementById('settings-form');
             configData = {
                 name: settingsForm.elements['server-name'].value,
                 image: settingsForm.elements['docker-image'].value,
                 port: settingsForm.elements['server-port'].value,
-                // Соберите другие параметры
+                restart: settingsForm.elements['restart-policy'].value,
+                environment: Array.from(environmentVariablesDiv.children).map(envDiv => {
+                    return {
+                        key: envDiv.querySelector('.env-key').value,
+                        value: envDiv.querySelector('.env-value').value
+                    };
+                }).filter(env => env.key && env.value),
+                volumes: Array.from(volumesDiv.children).map(volDiv => {
+                    return `${volDiv.querySelector('.volume-source').value}:${volDiv.querySelector('.volume-destination').value}`;
+                }).filter(vol => vol.startsWith(':') === false && vol.endsWith(':') === false)
             };
         } else if (activeTab === 'docker') {
             configData = {
@@ -63,14 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для отправки запроса на бэкенд
     function createServer(config) {
-        // Здесь нужно реализовать отправку данных на бэкенд
-        // Можно использовать Cockpit.spawn() или fetch API
         console.log("Creating server with config:", config);
-
-        // Пример с использованием Cockpit.spawn (требует настройки бэкенда)
-        Cockpit.spawn(["/path/to/your/backend/script.py", JSON.stringify(config)])
+        Cockpit.spawn(["./backend_scripts/create_server.py", JSON.stringify(config)])
             .then(data => {
-                console.log("Server created successfully:", data);
+                console.log("Server creation response:", data);
                 loadServerList(); // Обновить список серверов
             })
             .catch(error => {
