@@ -3,6 +3,7 @@
         "index": {
             "label": "Minecraft Servers",
             "order": 50,
+            "path":"index.html",
             "keywords": [
                 {
                     "matches": ["minecraft", "servers", "ms"]
