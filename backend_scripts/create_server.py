@@ -27,7 +27,35 @@ services:
 """
         return docker_compose_content
 
+def list_servers():
+    try:
+        process = subprocess.Popen(['docker', 'ps', '--filter', 'name=minecraft-', '--format', '{{json .}}'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        if stderr:
+            print(json.dumps([])) # Вернуть пустой список в случае ошибки
+            return
+
+        servers = []
+        for line in stdout.decode().strip().split('\n'):
+            try:
+                server_info = json.loads(line)
+                servers.append({
+                    "name": server_info.get("Names"),
+                    "image": server_info.get("Image"),
+                    "status": server_info.get("State")
+                })
+            except json.JSONDecodeError:
+                print(json.dumps([]))
+                return
+        print(json.dumps(servers))
+    except Exception as e:
+        print(json.dumps([]))
+
 def main():
+    if "--list-servers" in sys.argv:
+        list_servers()
+        return
+
     if len(sys.argv) < 2:
         print(json.dumps({"status": "error", "message": "Configuration data not provided."}))
         sys.exit(1)

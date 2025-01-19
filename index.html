@@ -31,7 +31,11 @@
                             <input type="text" id="server-name" required><br><br>
 
                             <label for="docker-image">Docker Image:</label>
-                            <input type="text" id="docker-image" value="itzg/minecraft-server" required><br><br>
+                            <select id="docker-image">
+                                <option value="itzg/minecraft-server">itzg/minecraft-server</option>
+                                <option value="pterodactyl/yolks">pterodactyl/yolks</option>
+                                <!-- Можно добавить другие популярные образы -->
+                            </select><br><br>
 
                             <label for="server-port">Порт сервера:</label>
                             <input type="number" id="server-port" value="25565"><br><br>

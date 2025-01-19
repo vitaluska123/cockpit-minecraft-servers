@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeTab === 'settings') {
             configData = {
                 name: settingsForm.elements['server-name'].value,
-                image: settingsForm.elements['docker-image'].value,
+                image: settingsForm.elements['docker-image'].value, // Получаем значение из выпадающего списка
                 port: settingsForm.elements['server-port'].value,
                 restart: settingsForm.elements['restart-policy'].value,
                 environment: Array.from(environmentVariablesDiv.children).map(envDiv => {
@@ -120,11 +120,31 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Функция для загрузки списка серверов (нужно реализовать)
+    // Функция для загрузки списка серверов с бэкенда
     function loadServerList() {
-        // Здесь нужно получить список запущенных контейнеров или серверов
-        // и отобразить их в serverList
-        serverList.innerHTML = '<li>Сервер 1</li><li>Сервер 2</li>'; // Пример
+        Cockpit.spawn(["./backend_scripts/create_server.py", "--list-servers"])
+            .then(data => {
+                try {
+                    const servers = JSON.parse(data);
+                    serverList.innerHTML = ''; // Очищаем список
+                    if (Array.isArray(servers)) {
+                        servers.forEach(server => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = `${server.name} (${server.image})`; // Пример отображения
+                            serverList.appendChild(listItem);
+                        });
+                    } else {
+                        serverList.textContent = 'Не удалось загрузить список серверов.';
+                    }
+                } catch (e) {
+                    console.error("Ошибка при разборе JSON ответа:", e);
+                    serverList.textContent = 'Ошибка при загрузке списка серверов.';
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка при загрузке списка серверов:", error);
+                serverList.textContent = 'Ошибка при загрузке списка серверов.';
+            });
     }
 
     // Загрузка списка серверов при загрузке страницы
