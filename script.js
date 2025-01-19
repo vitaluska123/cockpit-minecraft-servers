@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("Script.js loaded");
+    console.log("typeof Cockpit:", typeof Cockpit);
+    
     const createButton = document.getElementById('create-server-button');
     const modal = document.getElementById('create-server-modal');
     const closeButton = document.querySelector('.close-button');
